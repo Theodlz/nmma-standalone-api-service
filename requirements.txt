@@ -1,2 +1,4 @@
-nmma
+python-ligo-lw==1.7.1
+nmma==0.0.3
 astropy
+tornado
