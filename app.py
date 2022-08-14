@@ -342,7 +342,7 @@ def make_app():
 if __name__ == "__main__":
     nmma_analysis = make_app()
     if 'PORT' in os.environ:
-        port = int(os.environ['PORT'])
+        port = int(os.environ['$PORT'])
     else:
         port = 6901
     nmma_analysis.listen(port)
