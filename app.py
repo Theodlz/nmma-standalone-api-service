@@ -297,7 +297,7 @@ class MainHandler(tornado.web.RequestHandler):
 
         def nmma_analysis_done_callback(
             future,
-            printger=print,
+            logger=log,
             data_dict=data_dict,
         ):
             """
@@ -314,7 +314,7 @@ class MainHandler(tornado.web.RequestHandler):
                 # catch all the exceptions and print them,
                 # try to write back to SkyPortal something
                 # informative.
-                printger(f"{str(future.exception())[:1024]} {e}")
+                logger(f"{str(future.exception())[:1024]} {e}")
                 result = {
                     "status": "failure",
                     "message": f"{str(future.exception())[:1024]}{e}",
