@@ -3,9 +3,4 @@ services:
   nmma:
     build: .
     network_mode: host
-    command:
-      - /bin/bash
-      - -c
-      - |
-        cd /nmma-standalone-api-service && python app.py
         

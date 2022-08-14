@@ -14,3 +14,5 @@ RUN git clone https://github.com/Theodlz/nmma-standalone-api-service.git
 RUN cd nmma-standalone-api-service && pip3 install -r requirements.txt
 
 EXPOSE 6901
+
+CMD ["python3", "nmma-standalone-api-service/app.py"]

@@ -341,7 +341,10 @@ def make_app():
 
 if __name__ == "__main__":
     nmma_analysis = make_app()
-    port = 6901
+    if 'PORT' in os.environ:
+        port = int(os.environ['PORT'])
+    else:
+        port = 6901
     nmma_analysis.listen(port)
     log(f"NMMA Service Listening on port {port}")
     tornado.ioloop.IOLoop.current().start()
