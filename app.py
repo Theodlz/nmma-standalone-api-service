@@ -37,7 +37,7 @@ def upload_analysis_results(results, data_dict, request_timeout=60):
     Upload the results to the webhook.
     """
 
-    log("Uploading results to webhook")
+    log(f"Uploading results to webhook: {data_dict['callback_url']}")
     if data_dict["callback_method"] != "POST":
         log("Callback URL is not a POST URL. Skipping.")
         return
