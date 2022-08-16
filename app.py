@@ -1,5 +1,6 @@
 # Credits to Michael W. Coughlin
 
+from inspect import classify_class_attrs
 import os
 import functools
 import tempfile
@@ -331,10 +332,17 @@ class MainHandler(tornado.web.RequestHandler):
         )
 
 
+class HealthHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write("Ok")
+
+
 def make_app():
     return tornado.web.Application(
         [
             (r"/analysis/nmma_analysis", MainHandler),
+            (r"/health", HealthHandler),
         ]
     )
 
