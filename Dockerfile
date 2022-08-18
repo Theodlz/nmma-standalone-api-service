@@ -1,18 +1,21 @@
-FROM ubuntu:22.04
+FROM continuumio/miniconda3
 
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && \
+    apt-get -y install gcc mono-mcs && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt install -y make python3 python-is-python3 python3-pip
 
-RUN apt install -y git
+ADD . /nmma
+WORKDIR /nmma
 
-RUN git clone https://git.ligo.org/lscsoft/bilby.git && cd bilby && pip install -r requirements.txt && pip install .
+RUN conda env create -f environment.yml
+# Initialize conda in bash config fiiles:
 
-RUN git clone https://github.com/Theodlz/nmma-standalone-api-service.git
-
-RUN cd nmma-standalone-api-service && pip3 install -r requirements.txt
+# Make RUN commands use the new environment:
+SHELL ["conda", "run", "-n", "nmma", "/bin/bash", "-c"]
 
 EXPOSE 6901
 
-CMD ["python3", "nmma-standalone-api-service/app.py"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "nmma", "python", "app.py"]
+

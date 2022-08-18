@@ -1,0 +1,17 @@
+name: nmma
+
+channels:
+- conda-forge
+
+dependencies:
+- python=3.9.*
+- gwpy
+- python-lalsimulation
+- bilby
+- pip
+- pip:
+  - joblib
+  - python-ligo-lw
+  - nmma==0.0.3
+  - astropy
+  - tornado
