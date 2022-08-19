@@ -3,6 +3,4 @@ services:
   nmma:
     build: .
     network_mode: host
-    ports:
-      - "6901:6901"
 

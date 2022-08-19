@@ -1,21 +1,22 @@
-FROM continuumio/miniconda3
+FROM condaforge/mambaforge:4.9.2-5 as conda
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && \
-    apt-get -y install gcc mono-mcs && \
-    rm -rf /var/lib/apt/lists/*
+COPY environment.yml .
+RUN mamba env create -f environment.yml && conda clean -afy
+RUN find -name '__pycache__' -type d -exec rm -rf '{}' '+'
+RUN rm -rf /opt/conda/envs/nmma/lib/python3.9/site-packages/pip
+RUN rm -rf /opt/conda/envs/nmma/lib/python3.9/i{dlelib, ensurepip}
+RUN rm -rf /opt/conda/envs/nmma/lib{a,t,l,u}san.so
+RUN find -name '*.a' -delete
+
+FROM gcr.io/distroless/base-debian10
+
+COPY --from=conda /opt/conda/envs/nmma /env
+COPY app.py app.py
+COPY /utils /utils
+COPY /priors /priors
+COPY --from=conda /usr/bin/cat /usr/bin/cat
+
+CMD ["/env/bin/python", "app.py"]
 
 
-ADD . /nmma
-WORKDIR /nmma
-
-RUN conda env create -f environment.yml
-# Initialize conda in bash config fiiles:
-
-# Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "nmma", "/bin/bash", "-c"]
-
-EXPOSE 6901
-
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "nmma", "python", "app.py"]
 
