@@ -11,12 +11,12 @@ RUN find -name '*.a' -delete
 FROM gcr.io/distroless/base-debian10
 
 COPY --from=conda /opt/conda/envs/nmma /env
-COPY app.py app.py
-COPY /utils /utils
-COPY /priors /priors
+COPY app.py /nmma/app.py
+COPY /utils /nmma/utils
+COPY /priors /nmma/priors
 COPY --from=conda /usr/bin/cat /usr/bin/cat
 
-CMD ["/env/bin/python", "app.py"]
+ENTRYPOINT ["/env/bin/python", "/nmma/app.py"]
 
 
 

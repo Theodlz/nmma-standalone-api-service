@@ -329,11 +329,16 @@ class MainHandler(tornado.web.RequestHandler):
             {"status": "pending", "message": "nmma_analysis_service: analysis started"}
         )
 
+class HealthHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write("OK")
 
 def make_app():
     return tornado.web.Application(
         [
             (r"/analysis/nmma_analysis", MainHandler),
+            (r"/health", HealthHandler),
         ]
     )
 
