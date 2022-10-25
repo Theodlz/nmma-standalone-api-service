@@ -1,18 +1,22 @@
-FROM ubuntu:22.04
+FROM condaforge/mambaforge:4.9.2-5 as conda
 
-ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update
+COPY environment.yml .
+RUN mamba env create -f environment.yml && conda clean -afy && \
+        find -name '__pycache__' -type d -exec rm -rf '{}' '+' && \
+        rm -rf /opt/conda/envs/nmma/lib/python3.9/site-packages/pip && \
+        rm -rf /opt/conda/envs/nmma/lib/python3.9/i{dlelib, ensurepip} && \
+        rm -rf /opt/conda/envs/nmma/lib{a,t,l,u}san.so && \
+        find -name '*.a' -delete
 
-RUN apt install -y make python3 python-is-python3 python3-pip
+FROM gcr.io/distroless/base-debian10
 
-RUN apt install -y git
+COPY --from=conda /opt/conda/envs/nmma /env
+COPY app.py /nmma/app.py
+COPY /utils /nmma/utils
+COPY /priors /nmma/priors
+COPY --from=conda /usr/bin/cat /usr/bin/cat
 
-RUN git clone https://git.ligo.org/lscsoft/bilby.git && cd bilby && pip install -r requirements.txt && pip install .
+ENTRYPOINT ["/env/bin/python", "/nmma/app.py"]
 
-RUN git clone https://github.com/Theodlz/nmma-standalone-api-service.git
 
-RUN cd nmma-standalone-api-service && pip3 install -r requirements.txt
 
-EXPOSE 6901
-
-CMD ["python3", "nmma-standalone-api-service/app.py"]

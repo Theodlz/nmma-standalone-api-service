@@ -3,4 +3,4 @@ services:
   nmma:
     build: .
     network_mode: host
-        
+
