@@ -194,6 +194,7 @@ def run_nmma_model(data_dict):
                 "--plot",
             ]
         )
+        print(args)
         main(args=args)
 
         posterior_file = os.path.join(
