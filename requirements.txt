@@ -1,6 +1,6 @@
 joblib
 python-ligo-lw
 nmma==0.0.8
-astropy
+astropy==5.2.1
 tornado
 afterglowpy
